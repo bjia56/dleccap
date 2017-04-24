@@ -343,11 +343,14 @@ def main():
     # which recordings to download?
     print "Which recording would you like to download?"
     input = raw_input("Enter a number between %i and %i, or press Enter to download all: " % (1, len(recordings)))
+    recording_list = []
     try:
-        input_as_int = int(input)
-        if input_as_int < 1 or input_as_int > len(recordings):
-            raise Exception("Invalid input")
-        recordings = recordings[input_as_int - 1 : input_as_int]
+        input_as_int = [int(i) for i in input.split(' ')]
+        for i in range(0, len(input_as_int)):
+            item = input_as_int[i]
+            if item < 1 or item > len(recordings):
+                raise Exception("Invalid input")
+            recording_list.append(recordings[item - 1])
     except:
         if input != "":
             # user did not press enter
@@ -361,8 +364,8 @@ def main():
         os.makedirs(directory)
 
     # download files
-    for index, recording in enumerate(recordings):
-        print "(%i/%i) Downloading %s ..." % (index + 1, len(recordings), recording["title"])
+    for index, recording in enumerate(recording_list):
+        print "(%i/%i) Downloading %s ..." % (index + 1, len(recording_list), recording["title"])
         download_recoding(recording)
         print
 
